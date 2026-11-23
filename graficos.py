@@ -84,6 +84,36 @@ def criar_figura(operacao, a, b=None, escalar=None):
             eixo.plot([inicio[0], fim[0]], [inicio[1], fim[1]],
                       [inicio[2], fim[2]], "--", color=CORES["B" if operacao == "soma" else "A"], alpha=0.7)
 
+    if operacao == "angulo":
+        a_v, b_v = vetores["A"], vetores["B"]
+        unidade_a = a_v / np.linalg.norm(a_v)
+        unidade_b = b_v / np.linalg.norm(b_v)
+        graus = op.angulo(a_v, b_v)
+        radianos = np.linspace(0, np.radians(graus), 80)
+        if dimensao == 2:
+            sentido = np.sign(np.linalg.det(np.stack((unidade_a, unidade_b))))
+            if sentido == 0:
+                sentido = 1
+            perpendicular = sentido * np.array([-unidade_a[1], unidade_a[0]])
+        else:
+            componente = unidade_b - np.dot(unidade_b, unidade_a) * unidade_a
+            if np.linalg.norm(componente) < 1e-12:
+                base = np.eye(3)[np.argmin(np.abs(unidade_a))]
+                componente = base - np.dot(base, unidade_a) * unidade_a
+            perpendicular = componente / np.linalg.norm(componente)
+        raio = max(0.25, min(np.linalg.norm(a_v), np.linalg.norm(b_v)) * 0.28)
+        pontos = raio * (np.outer(np.cos(radianos), unidade_a)
+                         + np.outer(np.sin(radianos), perpendicular))
+        meio = raio * (np.cos(radianos[len(radianos) // 2]) * unidade_a
+                       + np.sin(radianos[len(radianos) // 2]) * perpendicular)
+        if dimensao == 2:
+            eixo.plot(pontos[:, 0], pontos[:, 1], color="#ffe584", lw=2.5)
+            eixo.text(*meio, f"  θ = {graus:.3g}°", color="#ffe584")
+        else:
+            eixo.plot(pontos[:, 0], pontos[:, 1], pontos[:, 2],
+                      color="#ffe584", lw=2.5)
+            eixo.text(*meio, f"  θ = {graus:.3g}°", color="#ffe584")
+
     eixo.set_xlim(-limite, limite)
     eixo.set_ylim(-limite, limite)
     eixo.set_xlabel("X", color=TEXTO)

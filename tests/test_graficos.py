@@ -32,6 +32,14 @@ class GraficosTest(unittest.TestCase):
         self.assertEqual(list(auxiliar.get_xdata()), [2, 3])
         self.assertEqual(list(auxiliar.get_ydata()), [4, 2])
 
+    def test_angulo_aparece_nos_dois_modos(self):
+        for a, b in (([1, 0], [0, 1]), ([1, 0, 0], [0, 1, 0])):
+            with self.subTest(a=a):
+                eixo = criar_figura("angulo", a, b).axes[0]
+                self.assertTrue(any("90" in texto.get_text() for texto in eixo.texts))
+                self.assertTrue(any(linha.get_color() == "#ffe584" for linha in eixo.lines))
+                FigureCanvasAgg(eixo.figure).draw()
+
 
 if __name__ == "__main__":
     unittest.main()
