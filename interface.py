@@ -36,8 +36,6 @@ class VectorLab(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.canvas = None
         self.barra = None
-        self.dados_grafico = None
-        self.janela_cheia = None
 
         lateral = ctk.CTkScrollableFrame(self, width=300, fg_color="#1c2635")
         lateral.grid(row=0, column=0, sticky="nsew")
@@ -87,7 +85,7 @@ class VectorLab(ctk.CTk):
                           row=9, column=0, padx=20, pady=(22, 12), sticky="ew")
         ctk.CTkLabel(lateral, text="Ponto ou vírgula decimal.\n"
                      "2D: arraste para mover. 3D: botão esquerdo\n"
-                     "gira; botão direito move. Scroll aproxima.",
+                     "gira; botão direito move. Dois dedos dão zoom.",
                      justify="left", text_color="#91a3b8").grid(
                          row=10, column=0, padx=20, pady=(4, 20), sticky="w")
 
@@ -96,13 +94,8 @@ class VectorLab(ctk.CTk):
         conteudo.grid_columnconfigure(0, weight=1)
         conteudo.grid_rowconfigure(1, weight=3)
         conteudo.grid_rowconfigure(3, weight=2)
-        topo = ctk.CTkFrame(conteudo, fg_color="transparent")
-        topo.grid(row=0, column=0, sticky="ew", pady=(0, 6))
-        topo.grid_columnconfigure(0, weight=1)
-        ctk.CTkLabel(topo, text="VISUALIZAÇÃO", font=("Segoe UI", 14, "bold"),
-                     text_color="#55c7ff").grid(row=0, column=0, sticky="w")
-        ctk.CTkButton(topo, text="⛶  TELA CHEIA", width=145,
-                      command=self.abrir_tela_cheia).grid(row=0, column=1, sticky="e")
+        ctk.CTkLabel(conteudo, text="VISUALIZAÇÃO", font=("Segoe UI", 14, "bold"),
+                     text_color="#55c7ff").grid(row=0, column=0, sticky="w", pady=(0, 6))
         self.area = ctk.CTkFrame(conteudo, fg_color="#151b26")
         self.area.grid(row=1, column=0, sticky="nsew")
         ctk.CTkLabel(conteudo, text="ENTENDA O CÁLCULO",
@@ -170,7 +163,6 @@ class VectorLab(ctk.CTk):
             self._mostrar_texto(f"Verifique os dados: {erro}")
             return
 
-        self.dados_grafico = (nome, a, b, escalar)
         if self.canvas is not None:
             self.canvas.get_tk_widget().destroy()
             self.barra.destroy()
@@ -186,21 +178,19 @@ class VectorLab(ctk.CTk):
         barra.pack(fill="x")
         if figura.axes[0].name == "rectilinear":
             barra.pan()  # arrastar com o botão esquerdo move o plano 2D
+            canvas.mpl_connect("scroll_event", self._zoom_2d)
         return canvas, barra
 
-    def abrir_tela_cheia(self):
-        if self.dados_grafico is None:
+    def _zoom_2d(self, evento):
+        """Zoom em torno do cursor usando scroll de mouse ou dois dedos."""
+        eixo = evento.inaxes
+        if eixo is None or eixo.name != "rectilinear" or not evento.step:
             return
-        if self.janela_cheia is not None and self.janela_cheia.winfo_exists():
-            self.janela_cheia.lift()
-            return
-        janela = ctk.CTkToplevel(self)
-        self.janela_cheia = janela
-        janela.title("VECTOR LAB — Gráfico")
-        janela.configure(fg_color="#151b26")
-        janela.attributes("-fullscreen", True)
-        janela.bind("<Escape>", lambda _: janela.destroy())
-        ctk.CTkButton(janela, text="FECHAR TELA CHEIA  (Esc)", width=200,
-                      command=janela.destroy).pack(anchor="ne", padx=12, pady=8)
-        figura = criar_figura(*self.dados_grafico)
-        self._montar_grafico(janela, figura)
+        fator = 1.2 ** -evento.step
+        x0, x1 = eixo.get_xlim()
+        y0, y1 = eixo.get_ylim()
+        cx = evento.xdata if evento.xdata is not None else (x0 + x1) / 2
+        cy = evento.ydata if evento.ydata is not None else (y0 + y1) / 2
+        eixo.set_xlim(cx + (x0 - cx) * fator, cx + (x1 - cx) * fator)
+        eixo.set_ylim(cy + (y0 - cy) * fator, cy + (y1 - cy) * fator)
+        evento.canvas.draw_idle()

@@ -79,9 +79,9 @@ e a interpretação geométrica. A barra sob o gráfico permite salvar a figura
 e controlar a visualização; em 3D, arraste com o mouse para girar.
 
 No gráfico 2D, arraste com o botão esquerdo para mover o plano. No 3D, o botão
-esquerdo gira e o direito desloca. O scroll aproxima ou afasta. A operação
-Ângulo desenha a abertura e o valor em graus no gráfico. **TELA CHEIA** amplia
-o gráfico; pressione `Esc` para voltar.
+esquerdo gira e o direito desloca. O gesto de dois dedos no touchpad (ou a roda
+do mouse) aproxima e afasta. A operação Ângulo desenha a abertura e o valor em
+graus no gráfico.
 
 O aplicativo não usa internet nem banco de dados durante a execução. SymPy
 poderá ser incluído futuramente se houver necessidade de cálculo simbólico;
