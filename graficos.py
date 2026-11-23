@@ -9,6 +9,7 @@ import operacoes as op
 CORES = {"A": "#55c7ff", "B": "#ffb65c", "Resultado": "#8ef0af"}
 FUNDO = "#151b26"
 TEXTO = "#dce7f4"
+COR_ANGULO = "#ff5cf4"
 
 
 def _dados(operacao, a, b, escalar):
@@ -107,12 +108,14 @@ def criar_figura(operacao, a, b=None, escalar=None):
         meio = raio * (np.cos(radianos[len(radianos) // 2]) * unidade_a
                        + np.sin(radianos[len(radianos) // 2]) * perpendicular)
         if dimensao == 2:
-            eixo.plot(pontos[:, 0], pontos[:, 1], color="#ffe584", lw=2.5)
-            eixo.text(*meio, f"  θ = {graus:.3g}°", color="#ffe584")
+            eixo.plot(pontos[:, 0], pontos[:, 1], color=COR_ANGULO, lw=3)
+            eixo.text(*meio, f"  θ = {graus:.3g}°", color=COR_ANGULO,
+                      fontweight="bold")
         else:
             eixo.plot(pontos[:, 0], pontos[:, 1], pontos[:, 2],
-                      color="#ffe584", lw=2.5)
-            eixo.text(*meio, f"  θ = {graus:.3g}°", color="#ffe584")
+                      color=COR_ANGULO, lw=3)
+            eixo.text(*meio, f"  θ = {graus:.3g}°", color=COR_ANGULO,
+                      fontweight="bold")
 
     eixo.set_xlim(-limite, limite)
     eixo.set_ylim(-limite, limite)

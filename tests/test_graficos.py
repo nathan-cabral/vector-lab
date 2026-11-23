@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use("Agg")
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
-from graficos import criar_figura
+from graficos import COR_ANGULO, criar_figura
 
 
 class GraficosTest(unittest.TestCase):
@@ -37,7 +37,7 @@ class GraficosTest(unittest.TestCase):
             with self.subTest(a=a):
                 eixo = criar_figura("angulo", a, b).axes[0]
                 self.assertTrue(any("90" in texto.get_text() for texto in eixo.texts))
-                self.assertTrue(any(linha.get_color() == "#ffe584" for linha in eixo.lines))
+                self.assertTrue(any(linha.get_color() == COR_ANGULO for linha in eixo.lines))
                 FigureCanvasAgg(eixo.figure).draw()
 
 
