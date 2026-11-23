@@ -4,8 +4,8 @@ Calculadora vetorial desktop em Python para estudo de vetores 2D e 3D.
 
 ## Plano de entrega
 
-1. Núcleo matemático e testes (este pacote).
-2. Explicações educativas com fórmulas, substituições e interpretação geométrica.
+1. Núcleo matemático e testes (concluído).
+2. Explicações educativas com fórmulas, substituições e interpretação geométrica (concluído).
 3. Gráficos 2D e 3D integráveis à interface.
 4. Interface desktop, integração, documentação de uso e verificação final.
 
@@ -32,5 +32,18 @@ Para executar os testes:
 .venv\Scripts\python -m unittest discover -s tests -v
 ```
 
-`main.py` será preenchido no pacote da interface. Este primeiro pacote ainda
-não abre uma janela.
+## Pacote 2
+
+`educativo.py` oferece `explicar(nome, a, b=None, escalar=None)`. A resposta
+contém fórmula, substituição, desenvolvimento, resultado e significado
+geométrico. `texto()` reúne as partes para a futura interface. Os nomes das
+operações são os mesmos das funções em `operacoes.py`. A apresentação usa seis
+algarismos significativos, sem arredondar os cálculos internos.
+
+Exemplo no terminal:
+
+```powershell
+.venv\Scripts\python -c "from educativo import explicar; print(explicar('soma', [3, 2], [2, 4]).texto())"
+```
+
+`main.py` será preenchido no pacote da interface. Ainda não há janela gráfica.
