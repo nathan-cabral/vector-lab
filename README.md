@@ -7,7 +7,7 @@ Calculadora vetorial desktop em Python para estudo de vetores 2D e 3D.
 1. Núcleo matemático e testes (concluído).
 2. Explicações educativas com fórmulas, substituições e interpretação geométrica (concluído).
 3. Gráficos 2D e 3D integráveis à interface (concluído).
-4. Interface desktop, integração, documentação de uso e verificação final.
+4. Interface desktop, integração, documentação de uso e verificação final (concluído).
 
 Cada pacote será apresentado antes de iniciar o seguinte.
 
@@ -62,4 +62,22 @@ Para conferir um gráfico 2D antes da interface, execute:
 O arquivo `exemplo_2d.png` será criado na pasta do projeto. Pode apagá-lo após
 conferir, antes de usar `git add .`.
 
-`main.py` será preenchido no pacote da interface. Ainda não há janela gráfica.
+## Pacote 4 — aplicativo desktop
+
+Execute na pasta do projeto, pelo terminal do VS Code no Windows:
+
+```powershell
+.venv\Scripts\python main.py
+```
+
+Se ainda não criou o ambiente virtual, use os comandos de instalação acima.
+Escolha 2D ou 3D, digite as coordenadas de A e B, selecione a operação e clique
+em **CALCULAR**. Operações que exigem apenas A desativam B; a multiplicação por
+escalar mostra o campo `k`. O produto vetorial está disponível apenas em 3D.
+O painel inferior apresenta a fórmula, a substituição, as etapas, o resultado
+e a interpretação geométrica. A barra sob o gráfico permite salvar a figura
+e controlar a visualização; em 3D, arraste com o mouse para girar.
+
+O aplicativo não usa internet nem banco de dados durante a execução. SymPy
+poderá ser incluído futuramente se houver necessidade de cálculo simbólico;
+os cálculos atuais são numéricos com NumPy.
