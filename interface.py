@@ -176,17 +176,27 @@ class VectorLab(ctk.CTk):
         barra = BarraGrafico(canvas, pai, pack_toolbar=False)
         barra.update()
         barra.pack(fill="x")
+        canvas.mpl_connect("scroll_event", self._zoom_grafico)
         if figura.axes[0].name == "rectilinear":
             barra.pan()  # arrastar com o botão esquerdo move o plano 2D
-            canvas.mpl_connect("scroll_event", self._zoom_2d)
         return canvas, barra
 
-    def _zoom_2d(self, evento):
-        """Zoom em torno do cursor usando scroll de mouse ou dois dedos."""
+    def _zoom_grafico(self, evento):
+        """Zoom com scroll/touchpad nos planos 2D e 3D."""
         eixo = evento.inaxes
-        if eixo is None or eixo.name != "rectilinear" or not evento.step:
+        if eixo is None or not evento.step:
             return
         fator = 1.2 ** -evento.step
+        if eixo.name == "3d":
+            for obter, definir in ((eixo.get_xlim, eixo.set_xlim),
+                                   (eixo.get_ylim, eixo.set_ylim),
+                                   (eixo.get_zlim, eixo.set_zlim)):
+                minimo, maximo = obter()
+                centro = (minimo + maximo) / 2
+                metade = (maximo - minimo) * fator / 2
+                definir(centro - metade, centro + metade)
+            evento.canvas.draw_idle()
+            return
         x0, x1 = eixo.get_xlim()
         y0, y1 = eixo.get_ylim()
         cx = evento.xdata if evento.xdata is not None else (x0 + x1) / 2
