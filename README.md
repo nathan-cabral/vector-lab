@@ -6,7 +6,7 @@ Calculadora vetorial desktop em Python para estudo de vetores 2D e 3D.
 
 1. Núcleo matemático e testes (concluído).
 2. Explicações educativas com fórmulas, substituições e interpretação geométrica (concluído).
-3. Gráficos 2D e 3D integráveis à interface.
+3. Gráficos 2D e 3D integráveis à interface (concluído).
 4. Interface desktop, integração, documentação de uso e verificação final.
 
 Cada pacote será apresentado antes de iniciar o seguinte.
@@ -45,5 +45,21 @@ Exemplo no terminal:
 ```powershell
 .venv\Scripts\python -c "from educativo import explicar; print(explicar('soma', [3, 2], [2, 4]).texto())"
 ```
+
+## Pacote 3
+
+`graficos.py` oferece `criar_figura(nome, a, b=None, escalar=None)`, retornando
+uma figura Matplotlib sem abrir outra janela. A e B têm cores distintas; o
+resultado vetorial aparece em verde. Os gráficos 3D podem ser girados e
+aproximados com o mouse quando incorporados à interface no pacote 4.
+
+Para conferir um gráfico 2D antes da interface, execute:
+
+```powershell
+.venv\Scripts\python -c "from graficos import criar_figura; criar_figura('soma', [3, 2], [2, 4]).savefig('exemplo_2d.png')"
+```
+
+O arquivo `exemplo_2d.png` será criado na pasta do projeto. Pode apagá-lo após
+conferir, antes de usar `git add .`.
 
 `main.py` será preenchido no pacote da interface. Ainda não há janela gráfica.
